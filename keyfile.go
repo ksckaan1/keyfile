@@ -2,6 +2,8 @@ package keyfile
 
 import "bytes"
 
+const structTag = "keyfile"
+
 type Unmarshaler interface {
 	UnmarshalKeyFile(data []byte) error
 }
