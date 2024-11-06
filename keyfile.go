@@ -16,6 +16,10 @@ func Unmarshal(data []byte, v any) error {
 	return nil
 }
 
+type Marshaler interface {
+	MarshalKeyFile() ([]byte, error)
+}
+
 func Marshal(v any) ([]byte, error) {
 	var buf bytes.Buffer
 	err := NewEncoder(&buf).Encode(v)
