@@ -140,7 +140,7 @@ func (dec *Decoder) scanDocument() error {
 			dec.groups[dec.currentGroupName][key] = make(map[string]string)
 		}
 
-		dec.groups[dec.currentGroupName][key][subkey] = dec.unescape(strings.TrimSpace(parts[1]))
+		dec.groups[dec.currentGroupName][key][subkey] = unescape(strings.TrimSpace(parts[1]))
 	}
 
 	return nil
@@ -370,12 +370,4 @@ func (dec *Decoder) getValue(groupName, key string) string {
 
 func (dec *Decoder) getMapValue(groupName, key string) map[string]string {
 	return dec.groups[groupName][key]
-}
-
-func (dec *Decoder) unescape(value string) string {
-	value = strings.ReplaceAll(value, "\\s", " ")
-	value = strings.ReplaceAll(value, "\\n", "\n")
-	value = strings.ReplaceAll(value, "\\r", "\r")
-	value = strings.ReplaceAll(value, "\\t", "\t")
-	return value
 }

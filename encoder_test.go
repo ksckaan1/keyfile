@@ -224,6 +224,22 @@ func TestEncoder(t *testing.T) {
 			want: "[group]\n",
 			err:  nil,
 		},
+		{
+			name: "escaped string field",
+			model: struct {
+				Group struct {
+					Key1 string `keyfile:"key1,omitempty"`
+				} `keyfile:"group"`
+			}{
+				Group: struct {
+					Key1 string "keyfile:\"key1,omitempty\""
+				}{
+					Key1: "   example value\n\thello",
+				},
+			},
+			want: "[group]\nkey1=\\s\\s\\sexample value\\n\\thello\n",
+			err:  nil,
+		},
 	}
 
 	for _, tt := range tests {

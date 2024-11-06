@@ -3,6 +3,7 @@ package keyfile
 import (
 	"cmp"
 	"reflect"
+	"regexp"
 	"slices"
 	"strings"
 )
@@ -82,4 +83,27 @@ func split(value string, sep string) []string {
 		result = append(result, string(buff))
 	}
 	return result
+}
+
+func unescape(value string) string {
+	value = strings.ReplaceAll(value, "\\s", " ")
+	value = strings.ReplaceAll(value, "\\n", "\n")
+	value = strings.ReplaceAll(value, "\\r", "\r")
+	value = strings.ReplaceAll(value, "\\t", "\t")
+	return value
+}
+
+func replaceSpaces(input string) string {
+	re := regexp.MustCompile(`^\s+|\s+$`)
+	return re.ReplaceAllStringFunc(input, func(match string) string {
+		return strings.Repeat("\\s", len(match))
+	})
+}
+
+func escape(value string) string {
+	value = strings.ReplaceAll(value, "\n", "\\n")
+	value = strings.ReplaceAll(value, "\r", "\\r")
+	value = strings.ReplaceAll(value, "\t", "\\t")
+	value = replaceSpaces(value)
+	return value
 }

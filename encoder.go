@@ -170,7 +170,7 @@ func (enc *Encoder) encodeValue(rv reflect.Value) (string, error) {
 		return enc.encodeValue(rv.Elem())
 
 	case reflect.String:
-		return rv.String(), nil
+		return escape(rv.String()), nil
 
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		return strconv.FormatInt(rv.Int(), 10), nil
