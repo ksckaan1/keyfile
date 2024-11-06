@@ -281,7 +281,7 @@ func (dec *Decoder) decodeValue(rt reflect.Type, value string) (reflect.Value, e
 
 	case reflect.Slice:
 		sep := cmp.Or(getSeperator(dec.currentField.Tag), ";")
-		elems := dec.split(value, sep)
+		elems := split(value, sep)
 		slice := reflect.MakeSlice(rt, 0, len(elems))
 
 		for i := range elems {
@@ -318,7 +318,7 @@ func (dec *Decoder) decodeValue(rt reflect.Type, value string) (reflect.Value, e
 		return ptr, nil
 	}
 
-	return reflect.Value{}, ErrUnsupportedValueType
+	return reflect.Value{}, ErrUnsupportedValueType{}
 }
 
 func (dec *Decoder) decodeAnyValue(value string) reflect.Value {
@@ -370,28 +370,6 @@ func (dec *Decoder) getValue(groupName, key string) string {
 
 func (dec *Decoder) getMapValue(groupName, key string) map[string]string {
 	return dec.groups[groupName][key]
-}
-
-func (dec *Decoder) split(value string, sep string) []string {
-	result := make([]string, 0)
-	buff := make([]rune, 0)
-	for i, v := range value {
-		if i == 0 && string(v) == sep {
-			result = append(result, string(buff))
-			buff = make([]rune, 0)
-			continue
-		}
-		if string(v) == sep && value[i-1] != '\\' {
-			result = append(result, string(buff))
-			buff = make([]rune, 0)
-			continue
-		}
-		buff = append(buff, v)
-	}
-	if len(buff) > 0 {
-		result = append(result, string(buff))
-	}
-	return result
 }
 
 func (dec *Decoder) unescape(value string) string {

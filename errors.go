@@ -12,9 +12,20 @@ var (
 	ErrInvalidParameterType   = errors.New("keyfile: invalid parameter type")
 
 	// Key-Value Pair
-	ErrUnsupportedValueType = errors.New("keyfile: unsupported value type")
-	ErrInvalidMapKeyType    = errors.New("invalid map key type, must be a string")
+	ErrInvalidMapKeyType = errors.New("invalid map key type, must be a string")
 )
+
+type ErrUnsupportedValueType struct {
+	FieldName string
+	FieldType string
+}
+
+func (e ErrUnsupportedValueType) Error() string {
+	if e.FieldName == "" || e.FieldType == "" {
+		return "keyfile: unsupported value type"
+	}
+	return fmt.Sprintf("keyfile: unsupported value type: %s %s", e.FieldName, e.FieldType)
+}
 
 type ErrInvalidGroupName struct {
 	Line       string

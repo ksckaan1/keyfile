@@ -228,25 +228,35 @@ func TestDecoder(t *testing.T) {
 			name: "complex field",
 			src: `[example]
 						key1 = 10+11i 
-						key2 = 10+11i`,
+						key2 = 10+11i
+						key3 = (10+11i) 
+						key4 = (10+11i)`,
 			dst: &struct {
 				Example struct {
 					Key1 complex64  `keyfile:"key1"`
 					Key2 complex128 `keyfile:"key2"`
+					Key3 complex64  `keyfile:"key3"`
+					Key4 complex128 `keyfile:"key4"`
 				} `keyfile:"example"`
 			}{},
 			want: &struct {
 				Example struct {
 					Key1 complex64  `keyfile:"key1"`
 					Key2 complex128 `keyfile:"key2"`
+					Key3 complex64  `keyfile:"key3"`
+					Key4 complex128 `keyfile:"key4"`
 				} `keyfile:"example"`
 			}{
 				Example: struct {
 					Key1 complex64  `keyfile:"key1"`
 					Key2 complex128 `keyfile:"key2"`
+					Key3 complex64  `keyfile:"key3"`
+					Key4 complex128 `keyfile:"key4"`
 				}{
 					Key1: 10 + 11i,
 					Key2: 10 + 11i,
+					Key3: 10 + 11i,
+					Key4: 10 + 11i,
 				},
 			},
 			err: nil,

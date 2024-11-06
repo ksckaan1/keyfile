@@ -15,3 +15,12 @@ func Unmarshal(data []byte, v any) error {
 	}
 	return nil
 }
+
+func Marshal(v any) ([]byte, error) {
+	var buf bytes.Buffer
+	err := NewEncoder(&buf).Encode(v)
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
+}
