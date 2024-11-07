@@ -437,6 +437,94 @@ func TestDecoder(t *testing.T) {
 			},
 			err: nil,
 		},
+		{
+			name: "unexported group",
+			src: `[example]
+						key1 = 42`,
+			dst: &struct {
+				example struct {
+					Key1 int `keyfile:"key1"`
+				} `keyfile:"example"`
+			}{},
+			want: &struct {
+				example struct {
+					Key1 int `keyfile:"key1"`
+				} `keyfile:"example"`
+			}{
+				example: struct {
+					Key1 int `keyfile:"key1"`
+				}{
+					Key1: 0,
+				},
+			},
+			err: nil,
+		},
+		{
+			name: "ignored group",
+			src: `[example]
+						key1 = 42`,
+			dst: &struct {
+				Example struct {
+					Key1 int `keyfile:"key1"`
+				} `keyfile:"-"`
+			}{},
+			want: &struct {
+				Example struct {
+					Key1 int `keyfile:"key1"`
+				} `keyfile:"-"`
+			}{
+				Example: struct {
+					Key1 int `keyfile:"key1"`
+				}{
+					Key1: 0,
+				},
+			},
+			err: nil,
+		},
+		{
+			name: "unexported field",
+			src: `[example]
+						key1 = 42`,
+			dst: &struct {
+				Example struct {
+					key1 int `keyfile:"key1"`
+				} `keyfile:"example"`
+			}{},
+			want: &struct {
+				Example struct {
+					key1 int `keyfile:"key1"`
+				} `keyfile:"example"`
+			}{
+				Example: struct {
+					key1 int `keyfile:"key1"`
+				}{
+					key1: 0,
+				},
+			},
+			err: nil,
+		},
+		{
+			name: "ignored field",
+			src: `[example]
+						key1 = 42`,
+			dst: &struct {
+				Example struct {
+					Key1 int `keyfile:"-"`
+				} `keyfile:"example"`
+			}{},
+			want: &struct {
+				Example struct {
+					Key1 int `keyfile:"-"`
+				} `keyfile:"example"`
+			}{
+				Example: struct {
+					Key1 int `keyfile:"-"`
+				}{
+					Key1: 0,
+				},
+			},
+			err: nil,
+		},
 	}
 
 	for _, tt := range tests {

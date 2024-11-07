@@ -228,16 +228,80 @@ func TestEncoder(t *testing.T) {
 			name: "escaped string field",
 			model: struct {
 				Group struct {
-					Key1 string `keyfile:"key1,omitempty"`
+					Key1 string `keyfile:"key1"`
 				} `keyfile:"group"`
 			}{
 				Group: struct {
-					Key1 string "keyfile:\"key1,omitempty\""
+					Key1 string "keyfile:\"key1\""
 				}{
 					Key1: "   example value\n\thello",
 				},
 			},
 			want: "[group]\nkey1=\\s\\s\\sexample value\\n\\thello\n",
+			err:  nil,
+		},
+		{
+			name: "unexported group",
+			model: struct {
+				group struct {
+					Key1 string `keyfile:"key1"`
+				} `keyfile:"group"`
+			}{
+				group: struct {
+					Key1 string "keyfile:\"key1\""
+				}{
+					Key1: "value",
+				},
+			},
+			want: "",
+			err:  nil,
+		},
+		{
+			name: "ignored group",
+			model: struct {
+				Group struct {
+					Key1 string
+				} `keyfile:"-"`
+			}{
+				Group: struct {
+					Key1 string
+				}{
+					Key1: "value",
+				},
+			},
+			want: "",
+			err:  nil,
+		},
+		{
+			name: "unexported field",
+			model: struct {
+				Group struct {
+					key1 string
+				} `keyfile:"group"`
+			}{
+				Group: struct {
+					key1 string
+				}{
+					key1: "value",
+				},
+			},
+			want: "[group]\n",
+			err:  nil,
+		},
+		{
+			name: "ignored field",
+			model: struct {
+				Group struct {
+					Key1 string `keyfile:"-"`
+				} `keyfile:"group"`
+			}{
+				Group: struct {
+					Key1 string `keyfile:"-"`
+				}{
+					Key1: "value",
+				},
+			},
+			want: "[group]\n",
 			err:  nil,
 		},
 	}
