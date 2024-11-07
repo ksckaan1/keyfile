@@ -13,17 +13,26 @@ func isOmitempty(tag reflect.StructTag) bool {
 	if !ok {
 		return false
 	}
-	parts := split(tagField, ",")
-	return slices.ContainsFunc(parts, func(part string) bool {
-		return strings.TrimSpace(part) == "omitempty"
-	})
+	parts := split(tagField, ";")
+	for _, part := range parts {
+		if !strings.Contains(part, "omitempty") {
+			continue
+		}
+		subparts := strings.Split(part, ",")
+		if slices.ContainsFunc(subparts, func(p string) bool {
+			return strings.TrimSpace(p) == "omitempty"
+		}) {
+			return true
+		}
+	}
+	return false
 }
 func isIgnored(tag reflect.StructTag) bool {
 	tagField, ok := tag.Lookup(structTag)
 	if !ok {
 		return false
 	}
-	parts := split(tagField, ",")
+	parts := split(tagField, ";")
 	return slices.ContainsFunc(parts, func(part string) bool {
 		return strings.TrimSpace(part) == "-"
 	})
@@ -34,11 +43,13 @@ func getKeyName(tag reflect.StructTag) string {
 	if !ok {
 		return ""
 	}
-	parts := split(tagField, ",")
+	parts := split(tagField, ";")
 	for _, part := range parts {
 		part = strings.TrimSpace(part)
-		if !strings.Contains(part, "=") && part != "-" && part != "omitempty" {
-			return part
+		if !strings.Contains(part, ":") && part != "-" && part != "omitempty" {
+			result := strings.ReplaceAll(part, ",", "")
+			result = strings.ReplaceAll(result, "omitempty", "")
+			return result
 		}
 	}
 	return ""
@@ -50,12 +61,12 @@ func getSeperator(tag reflect.StructTag) string {
 		return ""
 	}
 	sep := ""
-	parts := split(tagField, ",")
+	parts := split(tagField, ";")
 
 	for _, part := range parts {
 		part = strings.TrimSpace(part)
-		if strings.HasPrefix(part, "sep=") {
-			sep = strings.ReplaceAll(strings.TrimPrefix(part, "sep="), "\\", "")
+		if strings.HasPrefix(part, "sep:") {
+			sep = strings.ReplaceAll(strings.TrimPrefix(part, "sep:"), "\\", "")
 			break
 		}
 	}
