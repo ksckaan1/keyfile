@@ -108,7 +108,7 @@ func (enc *Encoder) scanGroup(rv reflect.Value) error {
 
 		// Skip unexported or ignored groups
 		if !enc.currentField.IsExported() || isIgnored(enc.currentField.Tag) ||
-			isOmitempty(enc.currentField.Tag) && field.IsZero() {
+			(isOmitempty(enc.currentField.Tag) && field.IsZero()) {
 			continue
 		}
 
@@ -163,6 +163,14 @@ func (enc *Encoder) scanField(rv reflect.Value) (map[string]string, error) {
 func (enc *Encoder) encodeValue(rv reflect.Value) (string, error) {
 	if !rv.IsValid() {
 		return "", nil
+	}
+
+	if reflect.PointerTo(rv.Type()).Implements(reflect.TypeFor[Marshaler]()) {
+		result := rv.MethodByName("MarshalKeyFile").Call([]reflect.Value{})
+		if !result[1].IsNil() {
+			return "", result[1].Interface().(error)
+		}
+		return string(result[0].Bytes()), nil
 	}
 
 	switch rv.Kind() {

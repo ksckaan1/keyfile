@@ -237,6 +237,17 @@ func (dec *Decoder) fillField(field reflect.Value) error {
 }
 
 func (dec *Decoder) decodeValue(rt reflect.Type, value string) (reflect.Value, error) {
+	if reflect.PointerTo(rt).Implements(reflect.TypeFor[Unmarshaler]()) {
+		v := reflect.New(rt)
+		result := v.MethodByName("UnmarshalKeyFile").Call([]reflect.Value{
+			reflect.ValueOf([]byte(value)),
+		})
+		if !result[0].IsNil() {
+			return reflect.Value{}, result[0].Interface().(error)
+		}
+		return v.Elem(), nil
+	}
+
 	switch rt.Kind() {
 	case reflect.Interface:
 		return dec.decodeAnyValue(value), nil
