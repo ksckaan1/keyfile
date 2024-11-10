@@ -1,6 +1,6 @@
 # Keyfile parser for Go
 
-Keyfile is simular to INI file, but it is much flexible. It supports maps and lists as built-in types.
+Keyfile is similar to INI file, but it is much flexible. It supports maps and lists as built-in types.
 
 You can find more information about Keyfile format in [https://docs.gtk.org/glib/struct.KeyFile.html](https://docs.gtk.org/glib/struct.KeyFile.html)
 
