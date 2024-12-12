@@ -1,5 +1,11 @@
 # Keyfile parser for Go
 
+[![tag](https://img.shields.io/github/tag/ksckaan1/keyfile.svg)](https://github.com/ksckaan1/keyfile/releases)
+![Go Version](https://img.shields.io/badge/Go-%3E%3D%201.23.1-%23007d9c)
+[![Go report](https://goreportcard.com/badge/github.com/ksckaan1/keyfile)](https://goreportcard.com/report/github.com/ksckaan1/keyfile)
+[![Contributors](https://img.shields.io/github/contributors/ksckaan1/keyfile)](https://github.com/ksckaan1/keyfile/graphs/contributors)
+[![LICENSE](https://img.shields.io/badge/LICENCE-MIT-orange?style=flat)](./LICENSE)
+
 Keyfile is similar to INI file, but it is much flexible. It supports maps and lists as built-in types.
 
 You can find more information about Keyfile format in [https://docs.gtk.org/glib/struct.KeyFile.html](https://docs.gtk.org/glib/struct.KeyFile.html)
