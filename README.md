@@ -6,7 +6,7 @@
 [![Contributors](https://img.shields.io/github/contributors/ksckaan1/keyfile)](https://github.com/ksckaan1/keyfile/graphs/contributors)
 [![LICENSE](https://img.shields.io/badge/LICENCE-MIT-orange?style=flat)](./LICENSE)
 
-Keyfile is similar to INI file, but it is much flexible. It supports maps and lists as built-in types.
+Keyfile is similar to INI file, but it is more flexible. It supports maps and lists as built-in types.
 
 You can find more information about Keyfile format in [https://docs.gtk.org/glib/struct.KeyFile.html](https://docs.gtk.org/glib/struct.KeyFile.html)
 
